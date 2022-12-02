@@ -17,6 +17,7 @@ builds:
       - amd64
       - arm
       - arm64
+      - s390x
     goarm:
       - 6
       - 7
@@ -31,6 +32,18 @@ dockers:
       - "0hlov3s/{{ .ProjectName }}:latest-amd64"
     build_flag_templates:
       - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+  - use: buildx
+    goos: linux
+    goarch: s390x
+    image_templates:
+      - "0hlov3s/{{ .ProjectName }}:{{ .Version }}-s390x"
+      - "0hlov3s/{{ .ProjectName }}:latest-s390x"
+    build_flag_templates:
+      - "--platform=linux/s390x"
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
@@ -78,12 +91,14 @@ docker_manifests:
   - name_template: 0hlov3s/{{ .ProjectName }}:{{ .Version }}
     image_templates:
       - 0hlov3s/{{ .ProjectName }}:{{ .Version }}-amd64
+      - 0hlov3s/{{ .ProjectName }}:{{ .Version }}-s390x
       - 0hlov3s/{{ .ProjectName }}:{{ .Version }}-arm64v8
       - 0hlov3s/{{ .ProjectName }}:{{ .Version }}-armv6
       - 0hlov3s/{{ .ProjectName }}:{{ .Version }}-armv7
   - name_template: 0hlov3s/{{ .ProjectName }}:latest
     image_templates:
       - 0hlov3s/{{ .ProjectName }}:latest-amd64
+      - 0hlov3s/{{ .ProjectName }}:latest-s390x
       - 0hlov3s/{{ .ProjectName }}:latest-arm64v8
       - 0hlov3s/{{ .ProjectName }}:latest-armv6
       - 0hlov3s/{{ .ProjectName }}:latest-armv7
